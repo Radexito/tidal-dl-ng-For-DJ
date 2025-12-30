@@ -41,11 +41,6 @@ $ tidal-dl-ng --help
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-If you like this project and want to support it, feel free to buy me a coffee 🙃✌️
-
-<a href="https://www.buymeacoffee.com/exislow" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/arial-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
-<a href="https://ko-fi.com/exislow" target="_blank" rel="noopener noreferrer"><img src="https://help.ko-fi.com/hc/article_attachments/11833788361117" alt="61e11d430afb112ea33c3aa5_Button-1-p-500"></a>
-
 ## 💻 Installation / Upgrade
 
 **Requirements**: Python version 3.12 / 3.13 (other versions might work but are not tested!)
