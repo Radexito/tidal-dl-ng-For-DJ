@@ -1310,6 +1310,7 @@ class Download:
         cover_data, path_cover = self._collect_cover(track, is_parent_album)
         extras = self._fetch_extras(track)
         m = self._build_metadata(
+            path_media,
             track,
             media_stream,
             release_date,
@@ -1320,7 +1321,6 @@ class Download:
             lyrics_unsynced,
             extras,
         )
-        m.path_file = path_media
         m.save()
         return True, path_lyrics, path_cover
 
@@ -1388,6 +1388,7 @@ class Download:
 
     def _build_metadata(
         self,
+        path: pathlib.Path,
         track: Track,
         media_stream: Stream,
         release_date: str,
@@ -1419,7 +1420,7 @@ class Download:
         bpm_val = extras.get("bpm")
         bpm: int | None = int(bpm_val) if isinstance(bpm_val, (int | float)) else None
         return Metadata(
-            path_file=pathlib.Path(self.path_base),
+            path_file=path,
             target_upc=target_upc,
             lyrics=lyrics_synced,
             lyrics_unsynced=lyrics_unsynced,
