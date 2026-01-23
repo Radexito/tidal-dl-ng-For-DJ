@@ -1,10 +1,4 @@
 #!/usr/bin/env python
-# Apply mpegdash patch before any tidalapi imports to fix TIDAL manifest parsing
-# See: https://github.com/FunWarry/tidal-dl-ng-For-DJ/issues/15
-from tidal_dl_ng.helper.mpegdash_patch import apply_mpegdash_patch
-
-apply_mpegdash_patch()
-
 import importlib.metadata
 from pathlib import Path
 from urllib.parse import urlparse
@@ -13,7 +7,13 @@ import requests
 import toml
 
 from tidal_dl_ng.constants import REQUESTS_TIMEOUT_SEC
+
+# Apply mpegdash patch before any tidalapi imports to fix TIDAL manifest parsing
+# See: https://github.com/FunWarry/tidal-dl-ng-For-DJ/issues/15
+from tidal_dl_ng.helper.mpegdash_patch import apply_mpegdash_patch
 from tidal_dl_ng.model.meta import ProjectInformation, ReleaseLatest
+
+apply_mpegdash_patch()
 
 
 def metadata_project() -> ProjectInformation:

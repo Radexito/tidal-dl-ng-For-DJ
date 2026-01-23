@@ -10,6 +10,7 @@ non-integer values for attributes that are expected to be integers.
 """
 
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,36 @@ def _safe_int(value: str) -> int | None:
     try:
         return int(value)
     except (ValueError, TypeError):
+        return None
+
+
+def _convert_list(attr_val: str, value_type) -> list[str]:
+    attr_type = value_type[0] if value_type else str
+    try:
+        return [attr_type(elem) for elem in re.split(r"[, ]", attr_val)]
+    except (ValueError, TypeError):
+        return [str(elem) for elem in re.split(r"[, ]", attr_val)]
+
+
+def _convert_single(attr_name: str, attr_val: str, value_type):
+    if value_type == int:
+        result = _safe_int(attr_val)
+        if result is None:
+            logger.debug(
+                "mpegdash: Could not convert '%s'='%s' to int, using None",
+                attr_name,
+                attr_val,
+            )
+        return result
+    try:
+        return value_type(attr_val)
+    except (ValueError, TypeError):
+        logger.debug(
+            "mpegdash: Could not convert '%s'='%s' to %s, using None",
+            attr_name,
+            attr_val,
+            value_type.__name__,
+        )
         return None
 
 
@@ -38,46 +69,18 @@ def apply_mpegdash_patch() -> None:
 
     try:
         from mpegdash import utils as mpegdash_utils
-        import re
-
-        # Store the original function
-        original_parse_attr_value = mpegdash_utils.parse_attr_value
 
         def patched_parse_attr_value(xmlnode, attr_name, value_type):
-            """
-            Patched version of parse_attr_value that handles non-integer values gracefully.
-            """
-            if attr_name not in xmlnode.attributes.keys():
+            if attr_name not in xmlnode.attributes:
                 return None
 
             attr_val = xmlnode.attributes[attr_name].nodeValue
 
             if isinstance(value_type, list):
-                attr_type = value_type[0] if len(value_type) > 0 else str
-                try:
-                    return [attr_type(elem) for elem in re.split(r"[, ]", attr_val)]
-                except (ValueError, TypeError):
-                    # If conversion fails, return as strings
-                    return [str(elem) for elem in re.split(r"[, ]", attr_val)]
+                return _convert_list(attr_val, value_type)
 
-            # Handle integer conversion failures gracefully
-            if value_type == int:
-                result = _safe_int(attr_val)
-                if result is None:
-                    logger.debug(
-                        f"mpegdash: Could not convert '{attr_name}'='{attr_val}' to int, using None"
-                    )
-                return result
+            return _convert_single(attr_name, attr_val, value_type)
 
-            try:
-                return value_type(attr_val)
-            except (ValueError, TypeError):
-                logger.debug(
-                    f"mpegdash: Could not convert '{attr_name}'='{attr_val}' to {value_type.__name__}, using None"
-                )
-                return None
-
-        # Apply the patch
         mpegdash_utils.parse_attr_value = patched_parse_attr_value
         _patched = True
         logger.debug("mpegdash patch applied successfully")
@@ -85,4 +88,4 @@ def apply_mpegdash_patch() -> None:
     except ImportError:
         logger.warning("Could not import mpegdash, patch not applied")
     except Exception as e:
-        logger.warning(f"Failed to apply mpegdash patch: {e}")
+        logger.warning("Failed to apply mpegdash patch: %s", e)
