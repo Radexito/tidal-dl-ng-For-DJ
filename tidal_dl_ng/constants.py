@@ -95,8 +95,3 @@ METADATA_LOOKUP_UPC: dict[str, dict[str, str]] = {
     "BARCODE": {"MP3": "BARCODE", "MP4": "BARCODE", "FLAC": "BARCODE"},
     "EAN": {"MP3": "EAN", "MP4": "EAN", "FLAC": "EAN"},
 }
-
-
-class InitialKey(StrEnum):
-    ALPHANUMERIC = "alphanumeric"
-    CLASSIC = "classic"
