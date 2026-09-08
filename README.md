@@ -1,233 +1,183 @@
-# ![](./tidal_dl_ng/ui/icon32.png) TIDAL Downloader Next Generation! (tidal-dl-ng)
+# TIDAL Downloader Next Generation (tidal-dl-ng-For-DJ)
 
-# [FORK] For DJ with management feature
+![Release](https://img.shields.io/github/v/release/Radexito/tidal-dl-ng-For-DJ)
+![License](https://img.shields.io/github/license/Radexito/tidal-dl-ng-For-DJ)
+![Commit activity](https://img.shields.io/github/commit-activity/m/Radexito/tidal-dl-ng-For-DJ)
+![Python](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue)
 
-[![Release](https://img.shields.io/github/v/release/FunWarry/tidal-dl-ng-For-DJ)](https://img.shields.io/github/v/release/FunWarry/tidal-dl-ng-For-DJ)
-[![Build status](https://img.shields.io/github/actions/workflow/status/FunWarry/tidal-dl-ng-For-DJ/release-or-test-build.yml)](https://github.com/FunWarry/tidal-dl-ng-For-DJ/actions/workflows/release-or-test-build.yml)
-[![Commit activity](https://img.shields.io/github/commit-activity/m/FunWarry/tidal-dl-ng-For-DJ)](https://img.shields.io/github/commit-activity/m/FunWarry/tidal-dl-ng-For-DJ)
-[![License](https://img.shields.io/github/license/FunWarry/tidal-dl-ng-For-DJ)](https://img.shields.io/github/license/FunWarry/tidal-dl-ng-For-DJ)
+Multithreaded, multi-chunked TIDAL downloader with a CLI and a PySide6 GUI.
+This repository continues the tidal-dl-ng code line (originally part of
+yaronzz's TIDAL downloader family); see [History and credits](#history-and-credits)
+for provenance.
 
-This tool allows you to download songs and videos from TIDAL. Multithreaded and multi-chunked downloads are supported.
+**A paid TIDAL plan is required.** Audio quality varies up to HiRes Lossless /
+TIDAL MAX 24-bit 192 kHz depending on the track. Dolby Atmos is supported.
 
-⚠️ **Windows** Defender / **Anti Virus** software / web browser alerts, while you try to download the app binary: This
-is a **false positive**. Please
-read [this issue](https://github.com/FunWarry/tidal-dl-ng-For-DJ/issues/231), [PyInstaller (used by this project) statement](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md)
-and [the alternative installation solution](https://github.com/FunWarry/tidal-dl-ng-For-DJ/?tab=readme-ov-file#-installation--upgrade).
+> ⚠️ Windows Defender / antivirus may flag the packaged GUI binary. This is a
+> known false positive caused by PyInstaller; see the
+> [official PyInstaller statement](https://github.com/pyinstaller/pyinstaller/blob/develop/.github/ISSUE_TEMPLATE/antivirus.md).
+> Installing from source (below) avoids prebuilt binaries entirely.
 
-**A paid TIDAL plan is required!** Audio quality varies up to HiRes Lossless / TIDAL MAX 24-bit, 192 kHz depending on
-the song available. Dolby Atmos is supported. You can use the command line or GUI version of this tool.
+![App](assets/app.png)
 
-![App Image](assets/app.png)
+## What it can do
+
+- Download tracks, videos, albums, playlists, artist discographies and mixes
+- Download **your account collections** (GUI): all playlists, Favorites
+  (tracks, albums, artists, videos) and Mixes & Radio, including My Mix,
+  My Video Mix and My Daily Discovery
+- Download your favorites from the CLI: `tdn dl_fav tracks|albums|artists|videos`
+- Multithreaded and multi-chunked downloads
+- Rich metadata tagging (genres, producers, composers, label, BPM where the
+  TIDAL API provides them; see [docs/missing_metadata.md](docs/missing_metadata.md))
+- FLAC extraction from MP4 containers (`extract_flac`)
+- Lyrics, album art and cover download
+- Playlist file creation, symlink mode for multi-playlist libraries
+- Adjustable audio and video quality, Dolby Atmos opt-in
+
+## Install
+
+Not on PyPI (yet). Install directly from this repository with uv:
+
+```bash
+# CLI only (provides: tidal-dl-ng, tdn)
+uv tool install git+https://github.com/Radexito/tidal-dl-ng-For-DJ
+
+# CLI + GUI (additionally provides: tidal-dl-ng-gui, tdng)
+uv tool install "tidal-dl-ng-for-dj[gui] @ git+https://github.com/Radexito/tidal-dl-ng-For-DJ"
+```
+
+`pipx` works the same way (`pipx install "tidal-dl-ng-for-dj[gui] @ git+https://github.com/Radexito/tidal-dl-ng-For-DJ"`).
+For development, clone the repo and use the project's uv/poetry setup
+(`make install` / `poetry install --all-extras`).
+
+## Quick start
 
 ```bash
 $ tidal-dl-ng --help
 
  Usage: tidal-dl-ng [OPTIONS] COMMAND [ARGS]...
 
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version  -v                                                                │
-│ --help     -h        Show this message and exit.                             │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ cfg    Print or set an option. If no arguments are given, all options will   │
-│        be listed. If only one argument is given, the value will be printed   │
-│        for this option. To set a value for an option simply pass the value   │
-│        as the second argument                                                │
-│ dl                                                                           │
-│ dl_fav Download from a favorites collection.                                 │
-│ gui                                                                          │
-│ login                                                                        │
-│ logout                                                                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────╮
+│ --version  -v                                                    │
+│ --help     -h        Show this message and exit.                 │
+╰──────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────╮
+│ cfg       Print or set an option. If no arguments are given,     │
+│           all options are listed. To set one, pass value as the  │
+│           second argument.                                       │
+│ dl                                                               │
+│ dl_fav    Download from a favorites collection.                  │
+│ gui                                                              │
+│ login                                                            │
+│ logout                                                           │
+╰──────────────────────────────────────────────────────────────────╯
 ```
 
-## 💻 Installation / Upgrade
-
-**Requirements**: Python version 3.12 / 3.13 (other versions might work but are not tested!)
+First log in (opens the TIDAL OAuth device flow):
 
 ```bash
-pip install --upgrade tidal-dl-ng
-# If you like to have the GUI as well use this command instead
-pip install --upgrade "tidal-dl-ng[gui]"
+tidal-dl-ng login
 ```
 
-## ⌨️ Usage
-
-You can use the command line (CLI) version to download media by URL:
+Download by URL:
 
 ```bash
 tidal-dl-ng dl https://tidal.com/browse/track/46755209
-# OR
-tdn dl https://tidal.com/browse/track/46755209
+tidal-dl-ng dl https://tidal.com/browse/album/123456789
+tidal-dl-ng dl https://tidal.com/browse/playlist/6f08c4a7-...
 ```
 
-Or by your favorites collections:
+Download favorites collections:
 
 ```bash
 tidal-dl-ng dl_fav tracks
-tidal-dl-ng dl_fav artists
 tidal-dl-ng dl_fav albums
-tidal-dl-ng dl_fav videos
 ```
 
-You can also use the GUI:
+Configuration lives in the CLI (`tidal-dl-ng cfg`), e.g. quality,
+`path_binary_ffmpeg`, `extract_flac`, `download_dolby_atmos`.
+
+### GUI
 
 ```bash
-tidal-dl-ng-gui
-# OR
 tdng
-# OR
-tidal-dl-ng gui
 ```
 
-If you would like to use the GUI version as a binary, have a look at the
-[release page](https://github.com/FunWarry/tidal-dl-ng-For-DJ/releases) and download the correct version for your OS.
+The GUI browses your account: **Playlists**, **Favorites** (tracks, albums,
+artists, videos) and **Mixes & Radio** (My Mix, My Video Mix, My Daily
+Discovery). Double-click a collection to download it. Hovering a track shows
+a rich metadata preview.
 
-## 🧁 Features
+## Development
 
-- Download tracks, videos, albums, playlists, your favorites etc.
-- Multithreaded and multi-chunked downloads
-- Metadata for songs (including extended metadata like genres, producers, composers when available from TIDAL API -
-  see [metadata documentation](docs/missing_metadata.md))
-- Adjustable audio and video download quality.
-- FLAC extraction from MP4 containers
-- Lyrics and album art / cover download
-- Creates playlist files
-- Can symlink tracks instead of having several copies, if added to different playlist
-- **🆕 Quick View on Hover** (GUI): Hover over tracks to instantly preview rich metadata without clicking (
-  see [feature documentation](docs/feature_hover_info.md))
+- `tidal_dl_ng/cli.py` and `tidal_dl_ng/gui.py` are the entry points
+  (`tidal-dl-ng` / `tdn` for CLI, `tidal-dl-ng-gui` / `tdng` for GUI).
+- GUI is PySide6, built with Qt Designer (`pyside6-uic` the `*.ui` files in
+  `tidal_dl_ng/gui/`).
+- Build targets live in the `Makefile` (`make gui-linux|gui-windows|gui-macos-dmg`).
+- Feature documentation: `docs/` (metadata, hover info, playlist API, ...).
 
-## ▶️ Getting started with development
+## FAQ
 
-### 🚰 Install dependencies
-
-Clone this repository and install the dependencies:
+**macOS: "app is damaged and cannot be opened"** - unsigned app quarantine:
 
 ```bash
-# First, install Poetry. On some operating systems you need to use `pip` instead of `pipx`
-pipx install --upgrade poetry
-poetry install --all-extras --with dev,docs
-```
-
-The main entry points are:
-
-```bash
-tidal_ng_dl/cli.py
-tidal_ng_dl/gui.py
-```
-
-### 📺 GUI Builder
-
-The GUI is built with `PySide6` using the [Qt Designer](https://doc.qt.io/qt-6/qtdesigner-manual.html):
-
-```bash
-PYSIDE_DESIGNER_PLUGINS=tidal_dl_ng/ui pyside6-designer
-```
-
-After all changes are saved, you need to translate the Qt Designer `*.ui` file into Python code, for instance:
-
-```
-pyside6-uic tidal_dl_ng/ui/main.ui -o tidal_dl_ng/ui/main.py
-```
-
-This needs to be done for each created / modified `*.ui` file accordingly.
-
-### 🏗 Build the project
-
-To build the project use this command:
-
-```bash
-# Install virtual environment and dependencies if not already done
-make install
-# Build macOS GUI
-make gui-macos-dmg
-# OR Build Windows GUI
-make gui-windows
-# OR Build Linux GUI
-make gui-linux
-# Check build output
-ls dist/
-```
-
-See the `Makefile` for all available build commands.
-
-The CI/CD pipeline will be triggered when you open a pull request, merge to main, or when you create a new release.
-
-To finalize the set-up for publishing to PyPi or Artifactory,
-see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/publishing/#set-up-for-pypi).
-For activating the automatic documentation with MkDocs,
-see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/mkdocs/#enabling-the-documentation-on-github).
-To enable the code coverage reports, see [here](https://fpgmaas.github.io/cookiecutter-poetry/features/codecov/).
-
-## ❓ FAQ
-
-### macOS Error Message: File/App is damaged and cannot be opened. You should move it to Trash
-
-If you download an (unsigned) app from any source other than those that Apple seems suited, the application gets an
-extended attribute "com.apple.Quarantine". This triggers the message: "<application> is damaged and can't be opened. You
-should move it to the Bin."
-
-Remove the attribute and you can launch the
-application. [Source 1](https://discussions.apple.com/thread/253714860?sortBy=rank) [Source 2](https://www.reddit.com/r/macsysadmin/comments/13vu7f3/app_is_damaged_and_cant_be_opened_error_on_ventura/)
-
-```
 sudo xattr -dr com.apple.quarantine /Applications/TIDAL-Downloader-NG.app/
 ```
 
-Why is this app unsigned? Only developer enrolled in the paid Apple developer program are allowed to sign (legal) apps.
-Without this subscription app signing is not possible.
+**Windows antivirus flags the GUI** - false positive from PyInstaller, see the
+statement linked at the top.
 
-Gatekeeper really annoys you, and you like to disable it completely? Follow
-this [link](https://iboysoft.com/tips/how-to-disable-gatekeeper-macos-sequoia.html)
+**`extract_flac` fails** - your `path_binary_ffmpeg` setting is wrong; point it
+at a real ffmpeg binary.
 
-### My (Windows) antivirus app XYZ says the GUI version of this app is harmful
+**Linux: `libxcb-cursor0` missing** - install it (Ubuntu/Debian:
+`sudo apt install libxcb-cursor0`).
 
-Short answer: It is a lie. Get rid of your antivirus app.
+**Dolby Atmos** - enable `download_dolby_atmos`; Atmos items download as
+Atmos files at fixed 320 kbps (quality is not adjustable for Atmos).
 
-Long answer: See [here](https://github.com/FunWarry/tidal-dl-ng-For-DJ/issues/231)
+**Metadata shows "N/A" or "-"** - the TIDAL API does not expose that field for
+the item (genres, producers, BPM, ...); not a bug. Details in
+[docs/missing_metadata.md](docs/missing_metadata.md).
 
-### I get an error when `extract_flac` is enabled
+## History and credits
 
-Your `path_binary_ffmpeg` is probably wrong. Please read over and over again the help of this particular option until
-you get it right what path to put for `path_binary_ffmpeg`.
+The TIDAL downloader family started with yaronzz's
+[Tidal-Media-Downloader](https://github.com/yaronzz/Tidal-Media-Downloader)
+(still on GitHub). The `tidal-dl-ng` code line originally lived in
+`yaronzz/tidal-dl-ng` (and before that `yaronzz/tidal-dl`); both of those
+repositories return **404 on GitHub as of September 2026**. Whether they were
+deleted, made private or renamed is not verifiable from here (no Wayback
+Machine snapshots of them exist either), so nothing is claimed about how or
+by whom they disappeared.
 
-### My Linux (e.g. Ubuntu) complains that `libxcb-cursor0` is not installed
+The commit history preserved in this repository starts on **2023-12-19** with
+a history reset and file re-import authored by **Robert Honz**. The README of
+that first commit badges `exislow/tidal-dl-ng`, so the imported line is the
+**exislow continuation** of the original project, not a direct copy of
+yaronzz's repository. The repository was created on GitHub on **2026-01-14**
+and is owned by the **Radexito** account (it is not a fork); the most recent
+upstream merges (FunWarry's master, community PRs) and the 0.32.1 release
+landed there in January 2026. Whether the 2023-12 re-import happened in the
+exislow repository or somewhere else before that is not recorded in the
+preserved history, and how the repository came to the Radexito account
+(import, transfer, handover) is not public information.
 
-Simply install this dependency using your OS specific package manager.
+Credits (author names exactly as recorded in the preserved git history):
 
-Ubuntu / Debian
+- **yaronzz** - Tidal-Media-Downloader and the tidal-dl downloader family
+  this project is based on
+- **exislow** - the continuation this history was imported from (see above)
+- **Robert Honz** - history reset/import and the largest share of commits
+- **FunWarry / Warry** - mpegdash fix and refactors, merged late 2025/early 2026
+- **Rikrdoga, Winman486, Joshua Cantara, V3ntus, Maya Doshi, Mathéo Gevraise,
+  E.J. Talevi, musicalmusicalmusical** and every other contributor recorded
+  in the git log
 
-```bash
-sudo apt install libxcb-cursor0
-```
+## Disclaimer
 
-### A terminal is flashing when I run this app on Windows
-
-Please see this issue [#103](https://github.com/FunWarry/tidal-dl-ng-For-DJ/issues/103).
-
-This is due to the Python `ffmpeg` library which is used and only happens on windows if `extract_flac` is activated.
-
-### How can I download Dolby Atmos files?
-
-You need to activate `download_dolby_atmos` in the settings. Then, if an item is available in Dolby Atmos, it will be
-downloaded as an Dolby Atmos file instead of as an stereo audio file. Dolby Atmos ist only available as 320kbps at
-TIDAL (you cannot adjust the quality for Dolby Atmos downloads). If an item is available in Dolby Atmos the "Quality"
-column in the GUI will indicate this with `Dolby Atmos`
-
-### Why do some metadata fields show "—" or "N/A"?
-
-Some metadata fields like Genres, Producers, Composers, Label, or BPM may display `—` because **the TIDAL API does not
-provide this information** for that specific track or album. This is not a bug - TIDAL simply doesn't have or doesn't
-expose this data via their API.
-
-- **Bitrate shows "N/A"** for LOSSLESS tracks because they use variable bitrate compression
-- **Extended metadata** (genres, producers, etc.) depends on what TIDAL receives from music labels
-- See the [detailed metadata documentation](docs/missing_metadata.md) for more information
-
-## ‼️ Disclaimer
-
-- For educational purposes only. I am not liable and responsible for any damage that happens.
-- You should not use this method to distribute or pirate music.
-- It may be illegal to use this app in your country.
-
-- [cookiecutter-poetry](https://fpgmaas.github.io/cookiecutter-poetry/)
+- For educational purposes only. The author is not liable for any damage.
+- Do not use this to distribute or pirate music.
+- Downloading from TIDAL may be illegal in your country; check local law.
