@@ -1,9 +1,9 @@
 # TIDAL Downloader Next Generation (tidal-dl-ng-For-DJ)
 
+![Release](https://img.shields.io/github/v/release/Radexito/tidal-dl-ng-For-DJ)
 ![License](https://img.shields.io/github/license/Radexito/tidal-dl-ng-For-DJ)
-![Tag](https://img.shields.io/github/v/tag/Radexito/tidal-dl-ng-For-DJ)
 ![Commit activity](https://img.shields.io/github/commit-activity/m/Radexito/tidal-dl-ng-For-DJ)
-![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)
+![Python](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue)
 
 Multithreaded, multi-chunked TIDAL downloader with a CLI and a PySide6 GUI.
 This is the actively maintained continuation of `yaronzz/tidal-dl-ng`, kept
@@ -25,8 +25,7 @@ TIDAL MAX 24-bit 192 kHz depending on the track. Dolby Atmos is supported.
 - Download **your account collections** (GUI): all playlists, Favorites
   (tracks, albums, artists, videos) and Mixes & Radio, including My Mix,
   My Video Mix and My Daily Discovery
-- Incremental favorites sync from the CLI: `tdn dl-fav tracks --since 2026-01-01`
-  (also `artists`, `albums`, `videos`)
+- Download your favorites from the CLI: `tdn dl_fav tracks|albums|artists|videos`
 - Multithreaded and multi-chunked downloads
 - Rich metadata tagging (genres, producers, composers, label, BPM where the
   TIDAL API provides them; see [docs/missing_metadata.md](docs/missing_metadata.md))
@@ -88,10 +87,11 @@ tidal-dl-ng dl https://tidal.com/browse/album/123456789
 tidal-dl-ng dl https://tidal.com/browse/playlist/6f08c4a7-...
 ```
 
-Download favorites added since a date:
+Download favorites collections:
 
 ```bash
-tidal-dl-ng dl_fav tracks --since 2026-01-01
+tidal-dl-ng dl_fav tracks
+tidal-dl-ng dl_fav albums
 ```
 
 Configuration lives in the CLI (`tidal-dl-ng cfg`), e.g. quality,
@@ -154,7 +154,7 @@ Big thanks to everyone who built and maintained this over the years:
 
 - **yaronzz (Robert Honz)** - author of TIDAL Media Downloader and
   tidal-dl-ng, the original project this is based on
-- **exislow** - favorites downloads, Camelot wheel helper and GUI work
+- **exislow** - favorites and GUI work in the earlier upstream lines
 - **FunWarry / Warry** - mpegdash patch and refactors
 - **jotalevi, musicalmusicalmusical, Rikrdoga, Winman486, Joshua Cantara**
   and every other contributor whose commits are part of this history
