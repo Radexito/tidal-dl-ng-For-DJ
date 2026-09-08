@@ -155,15 +155,16 @@ by whom they disappeared.
 
 The commit history preserved in this repository starts on **2023-12-19** with
 a history reset and file re-import authored by **Robert Honz**. The README of
-that first commit badges `exislow/tidal-dl-ng`, so the imported line is the
-**exislow continuation** of the original project, not a direct copy of
-yaronzz's repository. The repository was created on GitHub on **2026-01-14**
-and is owned by the **Radexito** account (it is not a fork); the most recent
-upstream merges (FunWarry's master, community PRs) and the 0.32.1 release
-landed there in January 2026. Whether the 2023-12 re-import happened in the
-exislow repository or somewhere else before that is not recorded in the
-preserved history, and how the repository came to the Radexito account
-(import, transfer, handover) is not public information.
+that first commit badges `exislow/tidal-dl-ng`, so the code line preserved
+here traces back to the exislow continuation of the original project, not a
+direct copy of yaronzz's repository.
+
+This repository started as a **fork**, created to keep the tidal-dl-ng code
+available on the owner's own account after the upstream repositories
+disappeared from GitHub. The fork network was left afterwards, so GitHub no
+longer shows it as a fork (API reports `fork: false`, `created: 2026-01-14`).
+The most recent upstream merges (FunWarry's master, community PRs) and the
+0.32.1 release landed in January 2026.
 
 Credits (author names exactly as recorded in the preserved git history):
 
