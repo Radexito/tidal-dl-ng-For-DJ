@@ -20,11 +20,13 @@ dynamic = ["dependencies"]
 repository = "https://github.com/FunWarry/tidal-dl-ng-For-DJ"
 documentation = "https://FunWarry.github.io/tidal-dl-ng-For-DJ/"
 
+[project.gui-scripts]
+tidal-dl-ng-gui = "tidal_dl_ng.gui.activate:gui_activate"
+tdng = "tidal_dl_ng.gui.activate:gui_activate"
+
 [project.scripts]
 tidal-dl-ng = "tidal_dl_ng.cli:app"
-tidal-dl-ng-gui = "tidal_dl_ng.gui:gui_activate"
 tdn = "tidal_dl_ng.cli:app"
-tdng = "tidal_dl_ng.gui:gui_activate"
 
 [tool.poetry]
 packages = [{ include = "tidal_dl_ng" }]
