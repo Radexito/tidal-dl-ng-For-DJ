@@ -122,13 +122,25 @@ def search_results_all(session: Session, needle: str, types_media: SearchTypes =
         tmp_done: bool = True
 
         for key, value in tmp_result.items():
-            # Append pagination results, if there are any
-            if offset == 0:
-                result = tmp_result
-                tmp_done = False
-            elif bool(value):
-                result[key] += value
-                tmp_done = False
+            # Treat both None and [] as no value.
+            if not bool(value): continue
+
+            # Workaround for https://github.com/EbbLabs/python-tidal/issues/409:
+            # Some values are lists, some are not. Depending on the type, use a different concatenation function.
+            if not isinstance(value, list):
+                result.setdefault(key, []).append(value)
+
+                # Don't set tmp_done = False.
+                #
+                # Property top_hit is always present, regardless of the offset. If we would set [tmp_done = False] here,
+                # every query would be detected as non-empty and search would loop forever.
+                #
+                # Assuming tidal adds other such properties in the future, we skip it in general and not just for
+                # "top_hit" specifically.
+                continue
+
+            result.setdefault(key, []).extend(value)
+            tmp_done = False
 
         # Next page
         offset += limit
